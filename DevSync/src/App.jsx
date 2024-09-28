@@ -8,7 +8,7 @@ function App() {
 
   return (
     <>
-      Dev Sync
+    DevSync
     </>
   )
 }
