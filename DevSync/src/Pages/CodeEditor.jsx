@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { FileCode, Play } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import LOGODEVSYNC from "../assets/DevSyncLogo.png";
+import { Link } from "react-router-dom";
 
 export default function CodeEditor() {
-  const [html, setHtml] = useState('<h1>Hello, CodeCraft!</h1>');
-  const [css, setCss] = useState('body { font-family: sans-serif; }');
+  const [html, setHtml] = useState("<h1>Hello, CodeCraft!</h1>");
+  const [css, setCss] = useState("body { font-family: sans-serif; }");
   const [js, setJs] = useState('console.log("Welcome to CodeCraft!");');
-  const [output, setOutput] = useState('');
+  const [output, setOutput] = useState("");
 
   useEffect(() => {
     updateOutput();
@@ -33,10 +33,12 @@ export default function CodeEditor() {
       <header className="bg-white  shadow-md p-4">
         <div className="container mx-auto flex justify-between items-center">
           <Link to="/" className="flex items-center">
-            <FileCode className="h-8 w-8 text-primary mr-2" />
-            <span className="text-xl font-bold text-primary">CodeCraft</span>
+            <img  width={"80px"} src={LOGODEVSYNC} alt="" />
+            {/* <span className="text-xl font-bold text-primary">DevSync</span> */}
           </Link>
-          <button className="bg-primary text-black px-4 py-2 rounded">Save Project</button>
+          <button  className="bg-white text-black py-2 px-6 rounded border border-black hover:bg-black hover:text-white transition-colors">
+            Save Project
+          </button>
         </div>
       </header>
 
@@ -50,21 +52,30 @@ export default function CodeEditor() {
           <div className="space-y-4">
             <div className="tabs">
               <div className="tab-list grid w-full grid-cols-3">
-                <button className="tab" onClick={() => setHtml(html)}>HTML</button>
-                <button className="tab" onClick={() => setCss(css)}>CSS</button>
-                <button className="tab" onClick={() => setJs(js)}>JS</button>
+              
+              
+              
               </div>
               <div className="tab-content">
+              <button className="tab  text-left w-full font-bold" onClick={() => setHtml(html)}>
+                  HTML
+                </button>
                 <textarea
                   className="w-full h-64 p-2 bg-white  border border-gray-300  rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                   value={html}
                   onChange={(e) => setHtml(e.target.value)}
                 />
+                  <button className="tab text-left w-full font-bold" onClick={() => setCss(css)}>
+                  CSS
+                </button>
                 <textarea
                   className="w-full h-64 p-2 bg-white  border border-gray-300  rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                   value={css}
                   onChange={(e) => setCss(e.target.value)}
                 />
+                  <button className="tab text-left w-full font-bold" onClick={() => setJs(js)}>
+                  JS
+                </button>
                 <textarea
                   className="w-full h-64 p-2 bg-white  border border-gray-300  rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                   value={js}
@@ -73,8 +84,11 @@ export default function CodeEditor() {
               </div>
             </div>
             <div className="flex justify-end">
-              <button onClick={updateOutput} className="bg-primary text-white flex items-center px-4 py-2 rounded">
-                <Play className="mr-2 h-4 w-4" /> Run
+              <button
+                onClick={updateOutput}
+                className="bg-white text-black py-2 px-6 rounded border border-black hover:bg-black hover:text-white transition-colors"
+              >
+                Run
               </button>
             </div>
           </div>

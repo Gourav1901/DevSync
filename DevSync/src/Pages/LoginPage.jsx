@@ -81,7 +81,7 @@ export default function LoginPage() {
           transition={{ delay: 0.2, type: 'spring', stiffness: 260, damping: 20 }}
         >
           <FileCode className="h-16 w-16 text-primary" />
-          <h1 className="text-3xl font-bold mt-4 text-primary">Welcome to CodeCraft</h1>
+          <h1 className="text-3xl font-bold mt-4 text-primary">Welcome to DevSync</h1>
         </motion.div>
         <motion.p
           className="text-center text-black  mb-8"
@@ -107,7 +107,7 @@ export default function LoginPage() {
           transition={{ delay: 0.6 }}
         >
           <p className="text-sm text-black">
-            By continuing, you agree to CodeCraft's{' '}
+            By continuing, you agree to DevSync's{' '}
             <Link to="/terms" className="text-primary hover:underline">
               Terms of Service
             </Link>{' '}
