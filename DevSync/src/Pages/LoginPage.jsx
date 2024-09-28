@@ -1,10 +1,10 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { FileCode } from 'lucide-react';
-import { FcGoogle } from 'react-icons/fc'; // Google icon
+import { FcGoogle } from 'react-icons/fc';
 
-export default function LoginPage() {
+const LoginPage = () => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -14,8 +14,13 @@ export default function LoginPage() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const handleResize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
 
     const particles = [];
 
@@ -49,13 +54,6 @@ export default function LoginPage() {
 
     animate();
 
-    const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    window.addEventListener('resize', handleResize);
-
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -66,47 +64,51 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 relative overflow-hidden p-4">
       <canvas ref={canvasRef} className="absolute inset-0" />
       <motion.div
-        className="bg-white  p-8 rounded-lg shadow-lg w-full max-w-md relative z-10"
+        className="bg-white p-6 sm:p-8 rounded-lg shadow-lg w-full max-w-md relative z-10"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
         <motion.div
-          className="flex flex-col items-center justify-center mb-8"
+          className="flex flex-col items-center justify-center mb-6 sm:mb-8"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: 'spring', stiffness: 260, damping: 20 }}
         >
-          <FileCode className="h-16 w-16 text-primary" />
-          <h1 className="text-3xl font-bold mt-4 text-primary">Welcome to DevSync</h1>
+          <FileCode className="h-12 w-12 sm:h-16 sm:w-16 text-primary" />
+          <h1 className="text-2xl sm:text-3xl font-bold mt-4 text-primary text-center">Welcome to DevSync</h1>
         </motion.div>
         <motion.p
-          className="text-center text-black  mb-8"
+          className="text-center text-black mb-6 sm:mb-8 text-sm sm:text-base"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
         >
           Your collaborative coding journey begins here
         </motion.p>
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+        <motion.div 
+          className="flex justify-center"
+          whileHover={{ scale: 1.05 }} 
+          whileTap={{ scale: 0.95 }}
+        >
           <button
-            className="bg-primary text-black flex items-center justify-center gap-2 px-16 py-2 rounded border border-slate-950 text-xl transition-all duration-300 hover:bg-black hover:text-white"
+            className="bg-primary text-black flex items-center justify-center gap-2 px-4 sm:px-6 py-2 rounded border border-slate-950 text-base sm:text-xl w-full max-w-xs transition-all duration-300 hover:bg-black hover:text-white"
             onClick={handleGoogleLogin}
           >
-            <FcGoogle size={24} /> {/* Google icon */}
+            <FcGoogle size={20} className="sm:text-2xl" />
             Continue with Google
           </button>
         </motion.div>
         <motion.div
-          className="mt-8 text-center"
+          className="mt-6 sm:mt-8 text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
         >
-          <p className="text-sm text-black">
+          <p className="text-xs sm:text-sm text-black">
             By continuing, you agree to DevSync's{' '}
             <Link to="/terms" className="text-primary hover:underline">
               Terms of Service
@@ -121,4 +123,6 @@ export default function LoginPage() {
       </motion.div>
     </div>
   );
-}
+};
+
+export default LoginPage;

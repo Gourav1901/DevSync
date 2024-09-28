@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import LOGODEVSYNC from "../assets/DevSyncLogo.png";
 import { Link } from "react-router-dom";
 
-export default function CodeEditor() {
-  const [html, setHtml] = useState("<h1>Hello, CodeCraft!</h1>");
+const CodeEditor = () => {
+  const [html, setHtml] = useState("<h1>Hello, DevSync!</h1>");
   const [css, setCss] = useState("body { font-family: sans-serif; }");
-  const [js, setJs] = useState('console.log("Welcome to CodeCraft!");');
+  const [js, setJs] = useState('console.log("Welcome to DevSync!");');
   const [output, setOutput] = useState("");
+  const [activeTab, setActiveTab] = useState("html");
 
   useEffect(() => {
     updateOutput();
@@ -29,14 +29,20 @@ export default function CodeEditor() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100 ">
-      <header className="bg-white  shadow-md p-4">
-        <div className="container mx-auto flex justify-between items-center">
-          <Link to="/" className="flex items-center">
-            <img  width={"80px"} src={LOGODEVSYNC} alt="" />
-            {/* <span className="text-xl font-bold text-primary">DevSync</span> */}
+    <div className="min-h-screen flex flex-col bg-gray-100">
+      <header className="bg-white shadow-md py-4">
+        <div className="container mx-auto flex justify-between items-center px-4">
+          <Link to="/" className="flex items-center space-x-2">
+            <motion.div
+              whileHover={{ rotate: 360 }}
+              transition={{ duration: 0.5 }}
+              className="w-10 h-10 bg-black rounded-full flex items-center justify-center"
+            >
+              <span className="text-white font-bold text-xl">D</span>
+            </motion.div>
+            <span className="text-xl font-bold text-black">DevSync</span>
           </Link>
-          <button  className="bg-white text-black py-2 px-6 rounded border border-black hover:bg-black hover:text-white transition-colors">
+          <button className="px-4 py-2 border border-black rounded hover:bg-black hover:text-white transition-colors">
             Save Project
           </button>
         </div>
@@ -47,67 +53,71 @@ export default function CodeEditor() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-4"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-6"
         >
           <div className="space-y-4">
-            <div className="tabs">
-              <div className="tab-list grid w-full grid-cols-3">
-              
-              
-              
-              </div>
-              <div className="tab-content">
-              <button className="tab  text-left w-full font-bold" onClick={() => setHtml(html)}>
-                  HTML
-                </button>
-                <textarea
-                  className="w-full h-64 p-2 bg-white  border border-gray-300  rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  value={html}
-                  onChange={(e) => setHtml(e.target.value)}
-                />
-                  <button className="tab text-left w-full font-bold" onClick={() => setCss(css)}>
-                  CSS
-                </button>
-                <textarea
-                  className="w-full h-64 p-2 bg-white  border border-gray-300  rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  value={css}
-                  onChange={(e) => setCss(e.target.value)}
-                />
-                  <button className="tab text-left w-full font-bold" onClick={() => setJs(js)}>
-                  JS
-                </button>
-                <textarea
-                  className="w-full h-64 p-2 bg-white  border border-gray-300  rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  value={js}
-                  onChange={(e) => setJs(e.target.value)}
-                />
-              </div>
+            <div className="border-b border-gray-200">
+              <nav className="flex -mb-px">
+                {["html", "css", "js"].map((tab) => (
+                  <button
+                    key={tab}
+                    className={`uppercase py-2 px-4 text-sm font-medium ${
+                      activeTab === tab
+                        ? "border-b-2 border-black text-black"
+                        : "text-gray-500 hover:text-black"
+                    }`}
+                    onClick={() => setActiveTab(tab)}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </nav>
+            </div>
+            <div className="mt-4">
+              <textarea
+                className="w-full h-[calc(100vh-300px)] p-4 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent resize-none"
+                value={activeTab === "html" ? html : activeTab === "css" ? css : js}
+                onChange={(e) => {
+                  if (activeTab === "html") setHtml(e.target.value);
+                  else if (activeTab === "css") setCss(e.target.value);
+                  else setJs(e.target.value);
+                }}
+              />
             </div>
             <div className="flex justify-end">
               <button
                 onClick={updateOutput}
-                className="bg-white text-black py-2 px-6 rounded border border-black hover:bg-black hover:text-white transition-colors"
+                className="px-4 py-2 border border-black rounded hover:bg-black hover:text-white transition-colors"
               >
                 Run
               </button>
             </div>
           </div>
-          <div className="bg-white  border-neutral-950  rounded-md overflow-hidden">
-            <div className="bg-gray-200  p-2 font-semibold ">Output</div>
+          <div className="bg-white border border-gray-300 rounded-md overflow-hidden shadow-lg">
+            <div className="bg-gray-100 p-3 flex items-center justify-between">
+              <span className="font-semibold text-black">Output</span>
+              <button className="text-gray-500 hover:text-black">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
             <iframe
               title="output"
               srcDoc={output}
-              className="w-full h-[calc(100%-2rem)] border-none"
+              className="w-full h-[calc(100vh-250px)] border-none"
             />
           </div>
         </motion.div>
       </main>
 
-      <footer className="bg-white  shadow-md p-4 mt-8">
-        <div className="container mx-auto text-center text-sm text-black ">
-          © 2024 CodeCraft. All rights reserved.
+      <footer className="bg-white shadow-md py-4 mt-8">
+        <div className="container mx-auto text-center text-sm text-black">
+          © 2024 DevSync. All rights reserved.
         </div>
       </footer>
     </div>
   );
-}
+};
+
+export default CodeEditor;
