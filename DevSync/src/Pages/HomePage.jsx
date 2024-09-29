@@ -32,7 +32,7 @@ export function HomePage() {
     if (token) {
       navigate("/codeEditor");
     } else {
-      window.location.href = "https://dev-sync-6lco.vercel.app/login";
+      window.location.href = "https://devsynceditors.netlify.app/login";
     }
   };
   return (
