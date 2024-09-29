@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { FileCode } from 'lucide-react';
-import { FcGoogle } from 'react-icons/fc';
+import React, { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
+import { FileCode } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
 
 const LoginPage = () => {
   const canvasRef = useRef(null);
@@ -11,7 +11,7 @@ const LoginPage = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     const handleResize = () => {
@@ -20,7 +20,7 @@ const LoginPage = () => {
     };
 
     handleResize();
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     const particles = [];
 
@@ -47,7 +47,7 @@ const LoginPage = () => {
 
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(200, 200, 255, 0.5)';
+        ctx.fillStyle = "rgba(200, 200, 255, 0.5)";
         ctx.fill();
       });
     }
@@ -55,12 +55,20 @@ const LoginPage = () => {
     animate();
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
+  const navigate = useNavigate();
 
   const handleGoogleLogin = () => {
-    console.log('Google login attempted');
+    // Check for token in local storage
+    const token = localStorage.getItem("access_token");
+
+    if (token) {
+      navigate("/codeEditor");
+    } else {
+      window.location.href = "http://localhost:3000/google";
+    }
   };
 
   return (
@@ -76,10 +84,17 @@ const LoginPage = () => {
           className="flex flex-col items-center justify-center mb-6 sm:mb-8"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          transition={{ delay: 0.2, type: 'spring', stiffness: 260, damping: 20 }}
+          transition={{
+            delay: 0.2,
+            type: "spring",
+            stiffness: 260,
+            damping: 20,
+          }}
         >
           <FileCode className="h-12 w-12 sm:h-16 sm:w-16 text-primary" />
-          <h1 className="text-2xl sm:text-3xl font-bold mt-4 text-primary text-center">Welcome to DevSync</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mt-4 text-primary text-center">
+            Welcome to DevSync
+          </h1>
         </motion.div>
         <motion.p
           className="text-center text-black mb-6 sm:mb-8 text-sm sm:text-base"
@@ -89,9 +104,9 @@ const LoginPage = () => {
         >
           Your collaborative coding journey begins here
         </motion.p>
-        <motion.div 
+        <motion.div
           className="flex justify-center"
-          whileHover={{ scale: 1.05 }} 
+          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
           <button
@@ -109,11 +124,11 @@ const LoginPage = () => {
           transition={{ delay: 0.6 }}
         >
           <p className="text-xs sm:text-sm text-black">
-            By continuing, you agree to DevSync's{' '}
+            By continuing, you agree to DevSync's{" "}
             <Link to="/terms" className="text-primary hover:underline">
               Terms of Service
-            </Link>{' '}
-            and{' '}
+            </Link>{" "}
+            and{" "}
             <Link to="/privacy" className="text-primary hover:underline">
               Privacy Policy
             </Link>
