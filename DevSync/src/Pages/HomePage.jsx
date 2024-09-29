@@ -33,15 +33,16 @@ export function HomePage() {
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 100 }}
       >
-        <Link className="flex items-center justify-center" to="/">
-          <motion.div
-            whileHover={{ rotate: 360 }}
-            transition={{ duration: 0.5 }}
-          >
-            <img width={"80px"} src={LOGODEVSYNC} alt="" />
-          </motion.div>
-          {/* <span className="ml-2 text-xl font-bold">DevSync</span> */}
-        </Link>
+         <Link to="/" className="flex items-center space-x-2">
+            <motion.div
+              whileHover={{ rotate: 360 }}
+              transition={{ duration: 0.5 }}
+              className="w-10 h-10 bg-black rounded-full flex items-center justify-center"
+            >
+              <span className="text-white font-bold text-xl">D</span>
+            </motion.div>
+            <span className="text-xl font-bold text-black">DevSync</span>
+          </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6">
           {navItems.map(({ name, path }) => (
             <motion.div
