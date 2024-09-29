@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Code, Github, Layers, Zap, Users, Cloud } from "lucide-react";
 import LOGODEVSYNC from "../assets/DevSyncLogo.png";
 import { motion } from "framer-motion";
@@ -24,7 +24,17 @@ export function HomePage() {
     { name: "Contact", path: "/contact" },
     { name: "CodeEditor", path: "/codeEditor" },
   ];
+  const navigate = useNavigate();
+  const handleLoginPage = () => {
+    // Check for token in local storage
+    const token = localStorage.getItem("access_token");
 
+    if (token) {
+      navigate("/codeEditor");
+    } else {
+      window.location.href = "http://localhost:5173/google";
+    }
+  };
   return (
     <div className="flex flex-col min-h-screen">
       <motion.header
@@ -78,11 +88,13 @@ export function HomePage() {
                 </p>
               </motion.div>
               <motion.div className="space-x-4" variants={fadeIn}>
-                <Link to="/login">
-                  <button className="bg-black text-white py-2 px-6 rounded hover:bg-white hover:text-black border border-black transition-colors">
-                    Get Started
-                  </button>
-                </Link>
+                <button
+                  onClick={handleLoginPage}
+                  className="bg-black text-white py-2 px-6 rounded hover:bg-white hover:text-black border border-black transition-colors"
+                >
+                  Get Started
+                </button>
+
                 <button
                   className="bg-white text-black py-2 px-6 rounded border border-black hover:bg-black hover:text-white transition-colors"
                   variant="outline"
