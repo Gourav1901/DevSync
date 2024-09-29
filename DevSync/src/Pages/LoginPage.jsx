@@ -67,7 +67,7 @@ const LoginPage = () => {
     if (token) {
       navigate("/codeEditor");
     } else {
-      window.location.href = "https://dev-sync-6lco.vercel.app/google";
+      window.location.href = "https://devsync-backend.onrender.com/google";
     }
   };
 
