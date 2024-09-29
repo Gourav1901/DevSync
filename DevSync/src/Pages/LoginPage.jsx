@@ -60,16 +60,16 @@ const LoginPage = () => {
   }, []);
   const navigate = useNavigate();
 
-  const handleGoogleLogin = () => {
-    // Check for token in local storage
-    const token = localStorage.getItem("access_token");
+  // const handleGoogleLogin = () => {
+  //   // Check for token in local storage
+  //   const token = localStorage.getItem("access_token");
 
-    if (token) {
-      navigate("/codeEditor");
-    } else {
-      window.location.href = "https://devsync-backend.onrender.com/google";
-    }
-  };
+  //   if (token) {
+  //     navigate("/codeEditor");
+  //   } else {
+  //     window.location.href = "https://devsync-backend.onrender.com/google";
+  //   }
+  // };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 relative overflow-hidden p-4">
@@ -109,13 +109,15 @@ const LoginPage = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <button
-            className="bg-primary text-black flex items-center justify-center gap-2 px-4 sm:px-6 py-2 rounded border border-slate-950 text-base sm:text-xl w-full max-w-xs transition-all duration-300 hover:bg-black hover:text-white"
-            onClick={handleGoogleLogin}
-          >
-            <FcGoogle size={20} className="sm:text-2xl" />
-            Continue with Google
-          </button>
+          <a href="https://devsync-backend.onrender.com/google">
+            <button
+              className="bg-primary text-black flex items-center justify-center gap-2 px-4 sm:px-6 py-2 rounded border border-slate-950 text-base sm:text-xl w-full max-w-xs transition-all duration-300 hover:bg-black hover:text-white"
+              // onClick={handleGoogleLogin}
+            >
+              <FcGoogle size={20} className="sm:text-2xl" />
+              Continue with Google
+            </button>
+          </a>
         </motion.div>
         <motion.div
           className="mt-6 sm:mt-8 text-center"

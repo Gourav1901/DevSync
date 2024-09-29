@@ -32,7 +32,7 @@ export function HomePage() {
     if (token) {
       navigate("/codeEditor");
     } else {
-      window.location.href = "https://devsynceditors.netlify.app/login";
+      navigate("/login");
     }
   };
   return (
