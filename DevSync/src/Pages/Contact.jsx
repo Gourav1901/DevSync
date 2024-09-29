@@ -36,18 +36,18 @@ export function Contact() {
             whileHover={{ rotate: 360 }}
             transition={{ duration: 0.5 }}
           >
-            <img width={"80px"} src={LOGODEVSYNC} alt="" />
+            <img width={"80px"} src={LOGODEVSYNC} alt="DevSync Logo" />
           </motion.div>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6">
-        {navItems.map(({ name, path }) => (
+          {navItems.map(({ name, path }) => (
             <motion.div
               key={name}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
               <Link
-                to={path} // Add the to prop for navigation
+                to={path}
                 className="text-sm font-medium hover:text-primary transition-colors"
               >
                 {name}
@@ -60,20 +60,20 @@ export function Contact() {
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100">
           <motion.div
-            className="container px-4 md:px-6"
+            className="container max-w-6xl px-4 md:px-6 mx-auto"
             initial="initial"
             animate="animate"
             variants={stagger}
           >
             <div className="flex flex-col items-center space-y-4 text-center">
               <motion.h1
-                className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none"
+                className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl"
                 variants={fadeIn}
               >
                 Get in Touch
               </motion.h1>
               <motion.p
-                className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400"
+                className="mx-auto max-w-[700px]  text-black md:text-xl "
                 variants={fadeIn}
               >
                 We would love to hear from you! Whether you have a question,
@@ -85,7 +85,7 @@ export function Contact() {
 
         <section className="w-full py-12 md:py-24 lg:py-32">
           <motion.div
-            className="container px-4 md:px-6"
+            className="container max-w-4xl px-4 md:px-6 mx-auto"
             initial="initial"
             animate="animate"
             variants={stagger}
@@ -97,7 +97,7 @@ export function Contact() {
               Contact Form
             </motion.h2>
             <motion.form
-              className="flex flex-col max-w-md mx-auto space-y-4"
+              className="flex flex-col max-w-lg mx-auto space-y-4"
               variants={stagger}
             >
               <motion.input
@@ -133,7 +133,7 @@ export function Contact() {
 
         <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100">
           <motion.div
-            className="container px-4 md:px-6"
+            className="container max-w-4xl px-4 md:px-6 mx-auto"
             initial="initial"
             animate="animate"
             variants={stagger}
@@ -145,25 +145,25 @@ export function Contact() {
               Contact Information
             </motion.h2>
             <motion.p
-              className="text-lg text-gray-500 dark:text-gray-400 text-center mb-4"
+              className="text-lg  text-black text-center mb-4"
               variants={fadeIn}
             >
               Email:{" "}
-              <Link className="underline" href="mailto:support@devsync.com">
+              <a className="underline" href="mailto:support@devsync.com">
                 support@devsync.com
-              </Link>
+              </a>
             </motion.p>
             <motion.p
-              className="text-lg text-gray-500 dark:text-gray-400 text-center mb-4"
+              className="text-lg  text-black text-center mb-4"
               variants={fadeIn}
             >
               Phone:{" "}
-              <Link className="underline" href="tel:+1234567890">
+              <a className="underline" href="tel:+1234567890">
                 +1 234 567 890
-              </Link>
+              </a>
             </motion.p>
             <motion.p
-              className="text-lg text-gray-500 dark:text-gray-400 text-center"
+              className="text-lg  text-black text-center"
               variants={fadeIn}
             >
               Address: 123 DevSync Lane, Code City, CA 90210
@@ -178,16 +178,16 @@ export function Contact() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
       >
-        <p className="text-xs text-gray-500 dark:text-gray-400">
+        <p className="text-xs text-black ">
           © 2024 DevSync. All rights reserved.
         </p>
         <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
+          <a className="text-xs hover:underline underline-offset-4" href="#">
             Terms of Service
-          </Link>
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
+          </a>
+          <a className="text-xs hover:underline underline-offset-4" href="#">
             Privacy
-          </Link>
+          </a>
         </nav>
       </motion.footer>
     </div>

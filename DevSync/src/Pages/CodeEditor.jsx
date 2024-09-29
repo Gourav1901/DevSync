@@ -42,7 +42,7 @@ const CodeEditor = () => {
             </motion.div>
             <span className="text-xl font-bold text-black">DevSync</span>
           </Link>
-          <button className="px-4 py-2 border border-black rounded hover:bg-black hover:text-white transition-colors">
+          <button className="px-4 py-2 border border-black rounded hover:bg-gray-800 hover:text-white transition-colors">
             Save Project
           </button>
         </div>
@@ -87,7 +87,7 @@ const CodeEditor = () => {
             <div className="flex justify-end">
               <button
                 onClick={updateOutput}
-                className="px-4 py-2 border border-black rounded hover:bg-black hover:text-white transition-colors"
+                className="px-4 py-2 border border-black rounded hover:bg-gray-800 hover:text-white transition-colors"
               >
                 Run
               </button>
