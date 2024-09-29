@@ -1,31 +1,53 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import CodeMirror from '@uiw/react-codemirror';
+import { javascript } from '@codemirror/lang-javascript';
+import { html as htmlExtension } from '@codemirror/lang-html'; 
+import { css as cssExtension } from '@codemirror/lang-css';
+import { autocompletion } from '@codemirror/autocomplete';
 
 const CodeEditor = () => {
-  const [html, setHtml] = useState("<h1>Hello, DevSync!</h1>");
-  const [css, setCss] = useState("body { font-family: sans-serif; }");
-  const [js, setJs] = useState('console.log("Welcome to DevSync!");');
+  const [htmlCode, setHtmlCode] = useState("<h1>Hello, DevSync!</h1>");
+  const [cssCode, setCssCode] = useState("body { font-family: sans-serif; }");
+  const [jsCode, setJsCode] = useState('console.log("Welcome to DevSync!");');
   const [output, setOutput] = useState("");
   const [activeTab, setActiveTab] = useState("html");
 
   useEffect(() => {
     updateOutput();
-  }, [html, css, js]);
+  }, [htmlCode, cssCode, jsCode]);
 
   const updateOutput = () => {
     const combinedOutput = `
       <html>
         <head>
-          <style>${css}</style>
+          <style>${cssCode}</style>
         </head>
         <body>
-          ${html}
-          <script>${js}</script>
+          ${htmlCode}
+          <script>${jsCode}</script>
         </body>
       </html>
     `;
     setOutput(combinedOutput);
+  };
+
+  const htmlExtensions = useMemo(() => [htmlExtension(), autocompletion()], []);
+  const cssExtensions = useMemo(() => [cssExtension(), autocompletion()], []);
+  const jsExtensions = useMemo(() => [javascript(), autocompletion()], []);
+
+  const getExtensions = (language) => {
+    switch (language) {
+      case 'html':
+        return htmlExtensions;
+      case 'css':
+        return cssExtensions;
+      case 'js':
+        return jsExtensions;
+      default:
+        return [];
+    }
   };
 
   return (
@@ -47,7 +69,6 @@ const CodeEditor = () => {
           </button>
         </div>
       </header>
-
       <main className="flex-grow container mx-auto p-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -64,7 +85,7 @@ const CodeEditor = () => {
                     className={`uppercase py-2 px-4 text-sm font-medium ${
                       activeTab === tab
                         ? "border-b-2 border-black text-black"
-                        : "text-gray-500 hover:text-black"
+                        : "text-gray-500 hover:text-black  "
                     }`}
                     onClick={() => setActiveTab(tab)}
                   >
@@ -74,14 +95,16 @@ const CodeEditor = () => {
               </nav>
             </div>
             <div className="mt-4">
-              <textarea
-                className="w-full h-[calc(100vh-300px)] p-4 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent resize-none"
-                value={activeTab === "html" ? html : activeTab === "css" ? css : js}
-                onChange={(e) => {
-                  if (activeTab === "html") setHtml(e.target.value);
-                  else if (activeTab === "css") setCss(e.target.value);
-                  else setJs(e.target.value);
+              <CodeMirror
+                value={activeTab === "html" ? htmlCode : activeTab === "css" ? cssCode : jsCode}
+                height="calc(100vh - 300px)"
+                extensions={getExtensions(activeTab)}
+                onChange={(value) => {
+                  if (activeTab === "html") setHtmlCode(value);
+                  else if (activeTab === "css") setCssCode(value);
+                  else setJsCode(value);
                 }}
+                className="border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent  "
               />
             </div>
             <div className="flex justify-end">
@@ -94,6 +117,7 @@ const CodeEditor = () => {
             </div>
           </div>
           <div className="bg-white border border-gray-300 rounded-md overflow-hidden shadow-lg">
+            {/* Output iframe remains the same */}
             <div className="bg-gray-100 p-3 flex items-center justify-between">
               <span className="font-semibold text-black">Output</span>
               <button className="text-gray-500 hover:text-black">
@@ -110,7 +134,6 @@ const CodeEditor = () => {
           </div>
         </motion.div>
       </main>
-
       <footer className="bg-white shadow-md py-4 mt-8">
         <div className="container mx-auto text-center text-sm text-black">
           © 2024 DevSync. All rights reserved.

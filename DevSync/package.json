@@ -10,8 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "framer-motion": "^11.9.0",
-    "lucide-react": "^0.446.0",
+    "@codemirror/autocomplete": "^6.18.1",
+    "@codemirror/lang-css": "^6.3.0",
+    "@codemirror/lang-html": "^6.4.9",
+    "@codemirror/lang-javascript": "^6.2.2",
+    "@uiw/react-codemirror": "^4.23.3",
     "framer-motion": "^11.9.0",
     "lucide-react": "^0.446.0",
     "react": "^18.3.1",
