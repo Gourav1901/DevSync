@@ -32,7 +32,7 @@ export function HomePage() {
     if (token) {
       navigate("/codeEditor");
     } else {
-      window.location.href = "http://localhost:5173/google";
+      window.location.href = "https://dev-sync-6lco.vercel.app/google";
     }
   };
   return (
