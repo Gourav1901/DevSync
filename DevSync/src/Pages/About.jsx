@@ -34,14 +34,16 @@ export default function About() {
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 100 }}
       >
-        <Link className="flex items-center justify-center" to="/">
-          <motion.div
-            whileHover={{ rotate: 360 }}
-            transition={{ duration: 0.5 }}
-          >
-            <img className="w-16 h-16" src={LOGODEVSYNC} alt="DevSync Logo" />
-          </motion.div>
-        </Link>
+       <Link to="/" className="flex items-center space-x-2">
+            <motion.div
+              whileHover={{ rotate: 360 }}
+              transition={{ duration: 0.5 }}
+              className="w-10 h-10 bg-black rounded-full flex items-center justify-center"
+            >
+              <span className="text-white font-bold text-xl">D</span>
+            </motion.div>
+            <span className="text-xl font-bold text-black">DevSync</span>
+          </Link>
         <nav className="ml-auto hidden md:flex gap-6">
           {navItems.map(({ name, path }) => (
             <motion.div
