@@ -205,7 +205,7 @@ export function Contact() {
               className="text-lg  text-black text-center"
               variants={fadeIn}
             >
-              Address: 123 DevSync Machal, Road Indore, 453001
+              Address: 123 DevSync Machal, Dhar Road Indore, 453001
             </motion.p>
           </motion.div>
         </section>
