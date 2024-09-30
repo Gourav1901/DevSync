@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Check } from 'lucide-react';
+import { motion, AnimatePresence } from "framer-motion";
+import { Check, Menu, X } from 'lucide-react';
 
 // Custom Switch component
 const Switch = ({ checked, onChange }) => (
@@ -22,6 +22,7 @@ const Switch = ({ checked, onChange }) => (
 export function Pricing() {
   const [isYearly, setIsYearly] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
@@ -86,6 +87,10 @@ export function Pricing() {
     },
   ];
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <motion.header
@@ -120,14 +125,35 @@ export function Pricing() {
             </motion.div>
           ))}
         </nav>
-        <button className="ml-auto md:hidden">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
+        <button className="ml-auto md:hidden" onClick={toggleMobileMenu}>
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </motion.header>
+
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden bg-white shadow-md"
+          >
+            <nav className="flex flex-col items-center py-4">
+              {navItems.map(({ name, path }) => (
+                <Link
+                  key={name}
+                  to={path}
+                  className="text-sm font-medium text-black hover:text-gray-800 transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {name}
+                </Link>
+              ))}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-32 bg-black">
@@ -271,3 +297,5 @@ export function Pricing() {
     </div>
   );
 }
+
+   

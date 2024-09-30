@@ -1,8 +1,11 @@
+import React, { useState } from 'react';
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import LOGODEVSYNC from "../assets/DevSyncLogo.png";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X } from 'lucide-react';
 
 export function Contact() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
@@ -16,6 +19,7 @@ export function Contact() {
       },
     },
   };
+
   const navItems = [
     { name: "Login", path: "/login" },
     { name: "Pricing", path: "/pricing" },
@@ -23,6 +27,11 @@ export function Contact() {
     { name: "Contact", path: "/contact" },
     { name: "CodeEditor", path: "/codeEditor" },
   ];
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <motion.header
@@ -32,16 +41,16 @@ export function Contact() {
         transition={{ type: "spring", stiffness: 100 }}
       >
         <Link to="/" className="flex items-center space-x-2">
-            <motion.div
-              whileHover={{ rotate: 360 }}
-              transition={{ duration: 0.5 }}
-              className="w-10 h-10 bg-black rounded-full flex items-center justify-center"
-            >
-              <span className="text-white font-bold text-xl">D</span>
-            </motion.div>
-            <span className="text-xl font-bold text-black">DevSync</span>
-          </Link>
-        <nav className="ml-auto flex gap-4 sm:gap-6">
+          <motion.div
+            whileHover={{ rotate: 360 }}
+            transition={{ duration: 0.5 }}
+            className="w-10 h-10 bg-black rounded-full flex items-center justify-center"
+          >
+            <span className="text-white font-bold text-xl">D</span>
+          </motion.div>
+          <span className="text-xl font-bold text-black">DevSync</span>
+        </Link>
+        <nav className="ml-auto hidden md:flex gap-4 sm:gap-6">
           {navItems.map(({ name, path }) => (
             <motion.div
               key={name}
@@ -57,10 +66,38 @@ export function Contact() {
             </motion.div>
           ))}
         </nav>
+        <button className="ml-auto md:hidden" onClick={toggleMobileMenu}>
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </motion.header>
 
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden bg-white shadow-md"
+          >
+            <nav className="flex flex-col items-center py-4">
+              {navItems.map(({ name, path }) => (
+                <Link
+                  key={name}
+                  to={path}
+                  className="text-sm font-medium hover:text-primary transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {name}
+                </Link>
+              ))}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100">
+      <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100">
           <motion.div
             className="container max-w-6xl px-4 md:px-6 mx-auto"
             initial="initial"

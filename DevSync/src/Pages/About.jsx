@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import LOGODEVSYNC from "../assets/DevSyncLogo.png";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function About() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
@@ -27,23 +28,23 @@ export default function About() {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
       <motion.header
-        className="px-4 lg:px-6 h-20 flex items-center sticky top-0 z-50 bg-white shadow-md"
+        className="px-4 lg:px-6 h-20 flex items-center sticky top-0 z-50 bg-white bg-opacity-90 backdrop-filter backdrop-blur-lg shadow-md"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 100 }}
       >
-       <Link to="/" className="flex items-center space-x-2">
-            <motion.div
-              whileHover={{ rotate: 360 }}
-              transition={{ duration: 0.5 }}
-              className="w-10 h-10 bg-black rounded-full flex items-center justify-center"
-            >
-              <span className="text-white font-bold text-xl">D</span>
-            </motion.div>
-            <span className="text-xl font-bold text-black">DevSync</span>
-          </Link>
+        <Link to="/" className="flex items-center space-x-2">
+          <motion.div
+            whileHover={{ rotate: 360 }}
+            transition={{ duration: 0.5 }}
+            className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center"
+          >
+            <span className="text-white font-bold text-xl">D</span>
+          </motion.div>
+          <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">DevSync</span>
+        </Link>
         <nav className="ml-auto hidden md:flex gap-6">
           {navItems.map(({ name, path }) => (
             <motion.div
@@ -53,7 +54,7 @@ export default function About() {
             >
               <Link
                 to={path}
-                className="text-sm font-medium hover:text-primary transition-colors"
+                className="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors"
               >
                 {name}
               </Link>
@@ -64,6 +65,7 @@ export default function About() {
           className="ml-auto md:hidden p-2 rounded-md hover:bg-gray-100"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -73,8 +75,33 @@ export default function About() {
         </motion.button>
       </motion.header>
 
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden bg-white shadow-lg rounded-b-lg overflow-hidden"
+          >
+            <nav className="flex flex-col gap-2 p-4">
+              {navItems.map(({ name, path }) => (
+                <Link
+                  key={name}
+                  to={path}
+                  className="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors py-2"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {name}
+                </Link>
+              ))}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <main className="flex-1">
-        <section className="w-full py-20 md:py-32 lg:py-44 bg-gray-100">
+        <section className="w-full py-20 md:py-32 lg:py-44">
           <motion.div
             className="container px-4 md:px-6 mx-auto"
             initial="initial"
@@ -83,10 +110,10 @@ export default function About() {
           >
             <div className="flex flex-col items-center space-y-8 text-center">
               <motion.div className="space-y-4" variants={fadeIn}>
-                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-6xl/none">
+                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
                   About DevSync
                 </h1>
-                <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl lg:text-2xl">
+                <p className="mx-auto max-w-[700px] text-gray-600 md:text-xl lg:text-2xl">
                   Empowering developers to write, share, and collaborate on code seamlessly.
                   Our platform brings teams together in real-time, making coding a truly collaborative experience.
                 </p>
@@ -103,7 +130,7 @@ export default function About() {
             variants={stagger}
           >
             <motion.h2
-              className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12"
+              className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600"
               variants={fadeIn}
             >
               Our Mission
@@ -113,17 +140,17 @@ export default function About() {
               variants={fadeIn}
             >
               <div className="space-y-4">
-                <p className="text-lg text-gray-500">
+                <p className="text-lg text-gray-600">
                   Our mission is to create a powerful, user-friendly coding platform
                   that fosters collaboration and innovation in software development.
                 </p>
-                <p className="text-lg text-gray-500">
+                <p className="text-lg text-gray-600">
                   We believe that great ideas come from collaboration, and DevSync
                   is here to facilitate that.
                 </p>
               </div>
-              <div className="bg-gray-100 p-6 rounded-lg shadow-md">
-                <svg className="w-full h-auto text-gray-400" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <div className="bg-white p-6 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300">
+                <svg className="w-full h-auto text-indigo-500" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M12 16L16 12L12 8M8 12H16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2"/>
                 </svg>
@@ -132,7 +159,7 @@ export default function About() {
           </motion.div>
         </section>
 
-        <section className="w-full py-20 md:py-32 bg-gray-100">
+        <section className="w-full py-20 md:py-32 bg-white">
           <motion.div
             className="container px-4 md:px-6 mx-auto"
             initial="initial"
@@ -140,7 +167,7 @@ export default function About() {
             variants={stagger}
           >
             <motion.h2
-              className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12"
+              className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600"
               variants={fadeIn}
             >
               Our Values
@@ -150,17 +177,18 @@ export default function About() {
               variants={stagger}
             >
               {[
-                { title: "Collaboration", description: "We value teamwork and the collective effort of our users." },
-                { title: "Innovation", description: "We are dedicated to continuous improvement and innovation." },
-                { title: "User-Centric", description: "Our platform is designed with the user in mind." },
+                { title: "Collaboration", description: "We value teamwork and the collective effort of our users.", icon: "👥" },
+                { title: "Innovation", description: "We are dedicated to continuous improvement and innovation.", icon: "💡" },
+                { title: "User-Centric", description: "Our platform is designed with the user in mind.", icon: "🎯" },
               ].map((value, index) => (
                 <motion.div
                   key={index}
                   variants={fadeIn}
-                  className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+                  className="bg-gradient-to-br from-indigo-50 to-purple-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
                 >
+                  <div className="text-4xl mb-4">{value.icon}</div>
                   <h3 className="text-xl font-semibold mb-4 text-gray-800">{value.title}</h3>
-                  <p className="text-gray-500">{value.description}</p>
+                  <p className="text-gray-600">{value.description}</p>
                 </motion.div>
               ))}
             </motion.div>
@@ -175,7 +203,7 @@ export default function About() {
             variants={stagger}
           >
             <motion.h2
-              className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12"
+              className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600"
               variants={fadeIn}
             >
               Join Us
@@ -184,12 +212,12 @@ export default function About() {
               className="text-center"
               variants={fadeIn}
             >
-              <p className="text-lg text-gray-500 mb-8">
+              <p className="text-lg text-gray-600 mb-8">
                 Ready to join a community of passionate developers? Sign up today
                 and start collaborating with us!
               </p>
               <motion.button
-                className="px-8 py-3 bg-gray-800 text-white font-semibold rounded-md shadow-md hover:bg-gray-700 transition-colors duration-300"
+                className="px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-md shadow-md hover:from-indigo-600 hover:to-purple-700 transition-colors duration-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
