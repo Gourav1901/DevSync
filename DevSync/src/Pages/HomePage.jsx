@@ -1,9 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
-import { Code, Github, Layers, Zap, Users, Cloud } from "lucide-react";
-import LOGODEVSYNC from "../assets/DevSyncLogo.png";
-import { motion } from "framer-motion";
+import React, { useState } from 'react';
+import { Link } from "react-router-dom";
+import { Code, Github, Layers, Zap, Users, Cloud, Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function HomePage() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
@@ -17,6 +19,7 @@ export function HomePage() {
       },
     },
   };
+
   const navItems = [
     { name: "Login", path: "/login" },
     { name: "Pricing", path: "/pricing" },
@@ -24,21 +27,15 @@ export function HomePage() {
     { name: "Contact", path: "/contact" },
     { name: "CodeEditor", path: "/codeEditor" },
   ];
-  const navigate = useNavigate();
-  const handleLoginPage = () => {
-    // Check for token in local storage
-    const token = localStorage.getItem("access_token");
 
-    if (token) {
-      navigate("/codeEditor");
-    } else {
-      navigate("/login");
-    }
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+
   return (
     <div className="flex flex-col min-h-screen">
       <motion.header
-        className="px-4 lg:px-6 h-16 flex items-center sticky top-0 z-50 bg-white  shadow-md"
+        className="px-4 lg:px-6 h-16 flex items-center sticky top-0 z-50 bg-white shadow-md"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 100 }}
@@ -53,7 +50,7 @@ export function HomePage() {
           </motion.div>
           <span className="text-xl font-bold text-black">DevSync</span>
         </Link>
-        <nav className="ml-auto flex gap-4 sm:gap-6">
+        <nav className="ml-auto hidden md:flex gap-4 sm:gap-6">
           {navItems.map(({ name, path }) => (
             <motion.div
               key={name}
@@ -61,7 +58,7 @@ export function HomePage() {
               whileTap={{ scale: 0.95 }}
             >
               <Link
-                to={path} // Add the to prop for navigation
+                to={path}
                 className="text-sm font-medium hover:text-primary transition-colors"
               >
                 {name}
@@ -69,9 +66,38 @@ export function HomePage() {
             </motion.div>
           ))}
         </nav>
+        <button className="ml-auto md:hidden" onClick={toggleMobileMenu}>
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </motion.header>
+
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden bg-white shadow-md"
+          >
+            <nav className="flex flex-col items-center py-4">
+              {navItems.map(({ name, path }) => (
+                <Link
+                  key={name}
+                  to={path}
+                  className="text-sm font-medium hover:text-primary transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {name}
+                </Link>
+              ))}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gray-100 ">
+        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gray-100">
           <motion.div
             className="container px-4 md:px-6"
             initial="initial"
@@ -106,6 +132,8 @@ export function HomePage() {
             </div>
           </motion.div>
         </section>
+
+        {/* Key Features Section */}
         <section className="w-full py-12 md:py-24 lg:py-32">
           <motion.div
             className="container px-4 md:px-6"
@@ -119,7 +147,7 @@ export function HomePage() {
             >
               Key Features
             </motion.h2>
-            <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-3">
+            <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
               {[
                 {
                   icon: Code,
@@ -175,7 +203,9 @@ export function HomePage() {
             </div>
           </motion.div>
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 ">
+
+        {/* How It Works Section */}
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100">
           <motion.div
             className="container px-4 md:px-6"
             initial="initial"
@@ -189,7 +219,7 @@ export function HomePage() {
               How It Works
             </motion.h2>
             <motion.div
-              className="grid gap-6 lg:grid-cols-3"
+              className="grid gap-6 md:grid-cols-3"
               variants={stagger}
             >
               {[
@@ -229,6 +259,8 @@ export function HomePage() {
             </motion.div>
           </motion.div>
         </section>
+
+        {/* Call to Action Section */}
         <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
@@ -242,11 +274,11 @@ export function HomePage() {
                 </p>
               </div>
               <div className="w-full max-w-sm space-y-2">
-                <form className="flex  space-x-2">
+                <form className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                   <input
                     placeholder="Enter your email"
                     type="email"
-                    className=" px-2  text-gray-700 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition duration-200"
+                    className="flex-grow px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition duration-200"
                   />
                   <button
                     className="bg-black text-white py-2 px-6 rounded hover:bg-white hover:text-black border border-black transition-colors"
@@ -255,9 +287,9 @@ export function HomePage() {
                     Sign Up
                   </button>
                 </form>
-                <p className="text-xs  text-gray-500 dark:text-gray-400">
+                <p className="text-xs text-gray-500 dark:text-gray-400">
                   By signing up, you agree to our{" "}
-                  <Link className="underline underline-offset-2" href="#">
+                  <Link className="underline underline-offset-2" to="#">
                     Terms & Conditions
                   </Link>
                 </p>
@@ -265,7 +297,9 @@ export function HomePage() {
             </div>
           </div>
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 ">
+
+        {/* Testimonials Section */}
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100">
           <motion.div
             className="container px-4 md:px-6"
             initial="initial"
@@ -279,7 +313,7 @@ export function HomePage() {
               What Our Users Say
             </motion.h2>
             <motion.div
-              className="grid gap-6 lg:grid-cols-3"
+              className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
               variants={stagger}
             >
               {[
@@ -321,6 +355,7 @@ export function HomePage() {
           </motion.div>
         </section>
       </main>
+
       <motion.footer
         className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t"
         initial={{ opacity: 0 }}
@@ -331,10 +366,10 @@ export function HomePage() {
           © 2024 DevSync. All rights reserved.
         </p>
         <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
+          <Link className="text-xs hover:underline underline-offset-4" to="#">
             Terms of Service
           </Link>
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
+          <Link className="text-xs hover:underline underline-offset-4" to="#">
             Privacy
           </Link>
         </nav>
