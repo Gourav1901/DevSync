@@ -316,19 +316,19 @@ export function HomePage() {
             >
               {[
                 {
-                  name: "Alex Johnson",
+                  name: "Jay Patel",
                   role: "Full Stack Developer",
                   quote:
                     "DevSync has revolutionized the way our team collaborates on projects. It's an indispensable tool for us.",
                 },
                 {
-                  name: "Samantha Lee",
+                  name: "Navin Chouhan",
                   role: "Data Scientist",
                   quote:
                     "The ability to run and share my analysis in real-time has greatly improved my workflow. Highly recommended!",
                 },
                 {
-                  name: "Michael Chen",
+                  name: "Nandkishor Parmar",
                   role: "Student",
                   quote:
                     "As a computer science student, DevSync has been invaluable for my group projects and learning journey.",
