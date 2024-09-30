@@ -115,13 +115,11 @@ export function HomePage() {
                 </p>
               </motion.div>
               <motion.div className="space-x-4" variants={fadeIn}>
-                <button
-                  onClick={handleLoginPage}
-                  className="bg-black text-white py-2 px-6 rounded hover:bg-white hover:text-black border border-black transition-colors"
-                >
-                  Get Started
-                </button>
-
+                <Link to="/login">
+                  <button className="bg-black text-white py-2 px-6 rounded hover:bg-white hover:text-black border border-black transition-colors">
+                    Get Started
+                  </button>
+                </Link>
                 <button
                   className="bg-white text-black py-2 px-6 rounded border border-black hover:bg-black hover:text-white transition-colors"
                   variant="outline"

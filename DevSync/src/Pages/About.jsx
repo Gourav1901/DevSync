@@ -39,11 +39,11 @@ export default function About() {
           <motion.div
             whileHover={{ rotate: 360 }}
             transition={{ duration: 0.5 }}
-            className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center"
+            className="w-10 h-10 bg-black rounded-full flex items-center justify-center"
           >
             <span className="text-white font-bold text-xl">D</span>
           </motion.div>
-          <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">DevSync</span>
+          <span className="text-xl font-bold bg-clip-text text-transparent bg-black ">DevSync</span>
         </Link>
         <nav className="ml-auto hidden md:flex gap-6">
           {navItems.map(({ name, path }) => (
@@ -54,7 +54,7 @@ export default function About() {
             >
               <Link
                 to={path}
-                className="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors"
+                className="text-sm font-medium text-black hover:text-grey-800 transition-colors"
               >
                 {name}
               </Link>
@@ -110,7 +110,7 @@ export default function About() {
           >
             <div className="flex flex-col items-center space-y-8 text-center">
               <motion.div className="space-y-4" variants={fadeIn}>
-                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl bg-clip-text text-transparent bg-black">
                   About DevSync
                 </h1>
                 <p className="mx-auto max-w-[700px] text-gray-600 md:text-xl lg:text-2xl">
@@ -130,7 +130,7 @@ export default function About() {
             variants={stagger}
           >
             <motion.h2
-              className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600"
+              className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12 bg-clip-text text-transparent bg-black"
               variants={fadeIn}
             >
               Our Mission
@@ -167,7 +167,7 @@ export default function About() {
             variants={stagger}
           >
             <motion.h2
-              className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600"
+              className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12 bg-clip-text text-transparent bg-black"
               variants={fadeIn}
             >
               Our Values
@@ -203,7 +203,7 @@ export default function About() {
             variants={stagger}
           >
             <motion.h2
-              className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600"
+              className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12 bg-clip-text text-transparent bg-black"
               variants={fadeIn}
             >
               Join Us
@@ -217,7 +217,7 @@ export default function About() {
                 and start collaborating with us!
               </p>
               <motion.button
-                className="px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-md shadow-md hover:from-indigo-600 hover:to-purple-700 transition-colors duration-300"
+                className="bg-black text-white py-2 px-6 rounded hover:bg-white hover:text-black border border-black transition-colors"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
