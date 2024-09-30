@@ -198,14 +198,14 @@ export function Contact() {
             >
               Phone:{" "}
               <a className="underline" href="tel:+1234567890">
-                +1 234 567 890
+                9111733035,9009060724
               </a>
             </motion.p>
             <motion.p
               className="text-lg  text-black text-center"
               variants={fadeIn}
             >
-              Address: 123 DevSync Lane, Code City, CA 90210
+              Address: 123 DevSync Machal, Road Indore, 453001
             </motion.p>
           </motion.div>
         </section>
