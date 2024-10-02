@@ -93,29 +93,55 @@ const CodeEditor = () => {
   // Check for toast message when the page loads
   window.onload = checkForToastMessage;
 
+  // New function to handle saving the project
+  const saveProject = () => {
+    const combinedCode = `
+      <html>
+        <head>
+          <style>${cssCode}</style>
+        </head>
+        <body>
+          ${htmlCode}
+          <script>${jsCode}</script>
+        </body>
+      </html>
+    `;
+    
+    const blob = new Blob([combinedCode], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "project.html"; // File name for the download
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast("Project saved successfully!", "success");
+  };
+
   return (
     <>
       <div
         id="toast"
-        class="fixed bottom-1 left-1/2 transform -translate-x-1/2 w-96 p-2 bg-green-500 text-white rounded-lg shadow-lg hidden"
+        className="fixed bottom-1 left-1/2 transform -translate-x-1/2 w-96 p-2 bg-green-500 text-white rounded-lg shadow-lg hidden"
       >
-        <div class="flex items-center">
-          <div class="mr-4">
+        <div className="flex items-center">
+          <div className="mr-4">
             <svg
-              class="w-6 h-6 text-white"
+              className="w-6 h-6 text-white"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor"
             >
               <path
-                fill-rule="evenodd"
+                fillRule="evenodd"
                 d="M2.25 12a9.75 9.75 0 1118.253 3.608 9.75 9.75 0 01-18.253-3.608zm14.73-2.47a.75.75 0 10-1.06-1.06L10.5 13.44l-1.97-1.97a.75.75 0 00-1.06 1.06l2.5 2.5a.75.75 0 001.06 0l5.03-5.03z"
-                clip-rule="evenodd"
+                clipRule="evenodd"
               />
             </svg>
           </div>
           <div>
-            <p class="font-bold">Success!</p>
+            <p className="font-bold">Success!</p>
             <p id="toast-message">Your operation was successful.</p>
           </div>
         </div>
@@ -134,7 +160,10 @@ const CodeEditor = () => {
               </motion.div>
               <span className="text-xl font-bold text-black">DevSync</span>
             </Link>
-            <button className="px-4 py-2 border border-black rounded hover:bg-gray-800 hover:text-white transition-colors">
+            <button
+              onClick={saveProject}
+              className="px-4 py-2 border border-black rounded hover:bg-gray-800 hover:text-white transition-colors"
+            >
               Save Project
             </button>
           </div>
