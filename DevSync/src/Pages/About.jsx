@@ -1,10 +1,32 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import Navbar from "../Components/Navbar";
 
 export default function About() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
 
+  // Check if tokens are present in local storage on mount
+  useEffect(() => {
+    const accessToken = localStorage.getItem("access_token");
+    const refreshToken = localStorage.getItem("refresh_token");
+    if (accessToken || refreshToken) {
+      setIsLoggedIn(true); // User is logged in
+    } else {
+      setIsLoggedIn(false); // User is not logged in
+    }
+  }, []);
+
+  // Logout function to clear tokens and redirect to login
+  const handleLogout = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    setIsLoggedIn(false); // Update login state
+    // Redirect to login page
+  };
+
+  // Animation variants for transitions
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
@@ -20,13 +42,12 @@ export default function About() {
   };
 
   const navItems = [
-    { name: "Login", path: "/login" },
     { name: "Pricing", path: "/pricing" },
     { name: "About", path: "/about" },
     { name: "Contact", path: "/contact" },
-    { name: "CodeEditor", path: "/codeEditor" },
+    ...(isLoggedIn ? [{ name: "CodeEditor", path: "/codeEditor" }] : []),
   ];
-
+  console.log(isLoggedIn, "login state");
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
       <motion.header
@@ -43,31 +64,29 @@ export default function About() {
           >
             <span className="text-white font-bold text-xl">D</span>
           </motion.div>
-          <span className="text-xl font-bold bg-clip-text text-transparent bg-black ">DevSync</span>
+          <span className="text-xl font-bold bg-clip-text text-transparent bg-black ">
+            DevSync
+          </span>
         </Link>
-        <nav className="ml-auto hidden md:flex gap-6">
-          {navItems.map(({ name, path }) => (
-            <motion.div
-              key={name}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Link
-                to={path}
-                className="text-sm font-medium text-black hover:text-grey-800 transition-colors"
-              >
-                {name}
-              </Link>
-            </motion.div>
-          ))}
-        </nav>
+        <Navbar />
+
         <motion.button
           className="ml-auto md:hidden p-2 rounded-md hover:bg-gray-100"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <line x1="3" y1="12" x2="21" y2="12"></line>
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -95,6 +114,26 @@ export default function About() {
                   {name}
                 </Link>
               ))}
+              {isLoggedIn ? (
+                <motion.button
+                  className="text-sm font-medium text-black hover:text-grey-800 transition-colors"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </motion.button>
+              ) : (
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Link
+                    to="/register"
+                    className="text-sm font-medium text-black hover:text-grey-800 transition-colors"
+                  >
+                    Sign Up
+                  </Link>
+                </motion.div>
+              )}
             </nav>
           </motion.div>
         )}
@@ -114,8 +153,9 @@ export default function About() {
                   About DevSync
                 </h1>
                 <p className="mx-auto max-w-[700px] text-gray-600 md:text-xl lg:text-2xl">
-                  Empowering developers to write, share, and collaborate on code seamlessly.
-                  Our platform brings teams together in real-time, making coding a truly collaborative experience.
+                  Empowering developers to write, share, and collaborate on code
+                  seamlessly. Our platform brings teams together in real-time,
+                  making coding a truly collaborative experience.
                 </p>
               </motion.div>
             </div>
@@ -141,18 +181,34 @@ export default function About() {
             >
               <div className="space-y-4">
                 <p className="text-lg text-gray-600">
-                  Our mission is to create a powerful, user-friendly coding platform
-                  that fosters collaboration and innovation in software development.
+                  Our mission is to create a powerful, user-friendly coding
+                  platform that fosters collaboration and innovation in software
+                  development.
                 </p>
                 <p className="text-lg text-gray-600">
-                  We believe that great ideas come from collaboration, and DevSync
-                  is here to facilitate that.
+                  We believe that great ideas come from collaboration, and
+                  DevSync is here to facilitate that.
                 </p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300">
-                <svg className="w-full h-auto text-indigo-500" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 16L16 12L12 8M8 12H16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2"/>
+                <svg
+                  className="w-full h-auto text-indigo-500"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 16L16 12L12 8M8 12H16"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
                 </svg>
               </div>
             </motion.div>
@@ -177,9 +233,24 @@ export default function About() {
               variants={stagger}
             >
               {[
-                { title: "Collaboration", description: "We value teamwork and the collective effort of our users.", icon: "👥" },
-                { title: "Innovation", description: "We are dedicated to continuous improvement and innovation.", icon: "💡" },
-                { title: "User-Centric", description: "Our platform is designed with the user in mind.", icon: "🎯" },
+                {
+                  title: "Collaboration",
+                  description:
+                    "We value teamwork and the collective effort of our users.",
+                  icon: "👥",
+                },
+                {
+                  title: "Innovation",
+                  description:
+                    "We are dedicated to continuous improvement and innovation.",
+                  icon: "💡",
+                },
+                {
+                  title: "User-Centric",
+                  description:
+                    "Our platform is designed with the user in mind.",
+                  icon: "🎯",
+                },
               ].map((value, index) => (
                 <motion.div
                   key={index}
@@ -187,7 +258,9 @@ export default function About() {
                   className="bg-gradient-to-br from-indigo-50 to-purple-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
                 >
                   <div className="text-4xl mb-4">{value.icon}</div>
-                  <h3 className="text-xl font-semibold mb-4 text-gray-800">{value.title}</h3>
+                  <h3 className="text-xl font-semibold mb-4 text-gray-800">
+                    {value.title}
+                  </h3>
                   <p className="text-gray-600">{value.description}</p>
                 </motion.div>
               ))}
@@ -208,13 +281,10 @@ export default function About() {
             >
               Join Us
             </motion.h2>
-            <motion.div
-              className="text-center"
-              variants={fadeIn}
-            >
+            <motion.div className="text-center" variants={fadeIn}>
               <p className="text-lg text-gray-600 mb-8">
-                Ready to join a community of passionate developers? Sign up today
-                and start collaborating with us!
+                Ready to join a community of passionate developers? Sign up
+                today and start collaborating with us!
               </p>
               <motion.button
                 className="bg-black text-white py-2 px-6 rounded hover:bg-white hover:text-black border border-black transition-colors"
@@ -239,10 +309,16 @@ export default function About() {
             © 2024 DevSync. All rights reserved.
           </p>
           <nav className="flex gap-6">
-            <Link className="text-sm hover:underline underline-offset-4 text-gray-500" to="#">
+            <Link
+              className="text-sm hover:underline underline-offset-4 text-gray-500"
+              to="#"
+            >
               Terms of Service
             </Link>
-            <Link className="text-sm hover:underline underline-offset-4 text-gray-500" to="#">
+            <Link
+              className="text-sm hover:underline underline-offset-4 text-gray-500"
+              to="#"
+            >
               Privacy
             </Link>
           </nav>

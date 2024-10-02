@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, Menu, X } from 'lucide-react';
+import { Check, Menu, X } from "lucide-react";
+import Navbar from "../Components/Navbar";
 
 // Custom Switch component
 const Switch = ({ checked, onChange }) => (
-  <div 
+  <div
     className={`w-14 h-7 flex items-center rounded-full p-1 cursor-pointer ${
-      checked ? 'bg-black' : 'bg-gray-300'
+      checked ? "bg-black" : "bg-gray-300"
     }`}
     onClick={() => onChange(!checked)}
   >
-    <motion.div 
+    <motion.div
       className="bg-white w-5 h-5 rounded-full shadow-md"
       animate={{ x: checked ? 28 : 0 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
@@ -23,7 +24,26 @@ export function Pricing() {
   const [isYearly, setIsYearly] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
 
+  // Check if tokens are present in local storage on mount
+  useEffect(() => {
+    const accessToken = localStorage.getItem("access_token");
+    const refreshToken = localStorage.getItem("refresh_token");
+    if (accessToken || refreshToken) {
+      setIsLoggedIn(true); // User is logged in
+    } else {
+      setIsLoggedIn(false); // User is not logged in
+    }
+  }, []);
+
+  // Logout function to clear tokens and redirect to login
+  const handleLogout = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    setIsLoggedIn(false); // Update login state
+    // Redirect to login page
+  };
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
@@ -39,13 +59,11 @@ export function Pricing() {
   };
 
   const navItems = [
-    { name: "Login", path: "/login" },
     { name: "Pricing", path: "/pricing" },
     { name: "About", path: "/about" },
     { name: "Contact", path: "/contact" },
-    { name: "CodeEditor", path: "/codeEditor" },
+    ...(isLoggedIn ? [{ name: "CodeEditor", path: "/codeEditor" }] : []),
   ];
-
   const pricingPlans = [
     {
       name: "Basic",
@@ -109,22 +127,7 @@ export function Pricing() {
           </motion.div>
           <span className="text-xl font-bold text-black">DevSync</span>
         </Link>
-        <nav className="ml-auto hidden md:flex gap-4 sm:gap-6">
-          {navItems.map(({ name, path }) => (
-            <motion.div
-              key={name}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Link
-                to={path}
-                className="text-sm font-medium text-black hover:text-gray-800 transition-colors"
-              >
-                {name}
-              </Link>
-            </motion.div>
-          ))}
-        </nav>
+        <Navbar />
         <button className="ml-auto md:hidden" onClick={toggleMobileMenu}>
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -139,17 +142,37 @@ export function Pricing() {
             transition={{ duration: 0.3 }}
             className="md:hidden bg-white shadow-md"
           >
-            <nav className="flex flex-col items-center py-4">
+            <nav className="flex flex-col gap-2 p-4">
               {navItems.map(({ name, path }) => (
                 <Link
                   key={name}
                   to={path}
-                  className="text-sm font-medium text-black hover:text-gray-800 transition-colors py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors py-2"
+                  onClick={() => setIsMenuOpen(false)}
                 >
                   {name}
                 </Link>
               ))}
+              {isLoggedIn ? (
+                <motion.button
+                  className="text-sm font-medium text-black hover:text-grey-800 transition-colors"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </motion.button>
+              ) : (
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Link
+                    to="/register"
+                    className="text-sm font-medium text-black hover:text-grey-800 transition-colors"
+                  >
+                    Sign Up
+                  </Link>
+                </motion.div>
+              )}
             </nav>
           </motion.div>
         )}
@@ -174,7 +197,8 @@ export function Pricing() {
                 className="mx-auto max-w-[700px] text-white text-sm md:text-base lg:text-xl"
                 variants={fadeIn}
               >
-                Choose the plan that's right for you and start building amazing projects with DevSync.
+                Choose the plan that's right for you and start building amazing
+                projects with DevSync.
               </motion.p>
             </div>
           </motion.div>
@@ -188,12 +212,21 @@ export function Pricing() {
             variants={stagger}
           >
             <div className="flex justify-center items-center mb-8 space-x-4">
-              <span className={`text-sm md:text-lg ${!isYearly ? 'text-black font-bold' : 'text-gray-500'}`}>Monthly</span>
-              <Switch
-                checked={isYearly}
-                onChange={setIsYearly}
-              />
-              <span className={`text-sm md:text-lg ${isYearly ? 'text-black font-bold' : 'text-gray-500'}`}>Yearly</span>
+              <span
+                className={`text-sm md:text-lg ${
+                  !isYearly ? "text-black font-bold" : "text-gray-500"
+                }`}
+              >
+                Monthly
+              </span>
+              <Switch checked={isYearly} onChange={setIsYearly} />
+              <span
+                className={`text-sm md:text-lg ${
+                  isYearly ? "text-black font-bold" : "text-gray-500"
+                }`}
+              >
+                Yearly
+              </span>
             </div>
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {pricingPlans.map((plan, index) => (
@@ -201,8 +234,8 @@ export function Pricing() {
                   key={plan.name}
                   className={`flex flex-col p-4 md:p-6 bg-white rounded-lg shadow-lg cursor-pointer transition-all duration-300 ${
                     selectedPlan === plan.name
-                      ? 'ring-2 ring-black transform scale-105'
-                      : 'hover:shadow-xl'
+                      ? "ring-2 ring-black transform scale-105"
+                      : "hover:shadow-xl"
                   }`}
                   variants={fadeIn}
                   initial="initial"
@@ -210,16 +243,23 @@ export function Pricing() {
                   transition={{ delay: index * 0.1 }}
                   onClick={() => setSelectedPlan(plan.name)}
                 >
-                  <h3 className="text-xl md:text-2xl font-bold mb-4 text-black">{plan.name}</h3>
+                  <h3 className="text-xl md:text-2xl font-bold mb-4 text-black">
+                    {plan.name}
+                  </h3>
                   <div className="mb-4">
                     <span className="text-2xl md:text-4xl font-bold text-black">
                       {isYearly ? plan.yearlyPrice : plan.monthlyPrice}
                     </span>
-                    <span className="text-gray-500 ml-2 text-sm md:text-base">{isYearly ? '/year' : '/month'}</span>
+                    <span className="text-gray-500 ml-2 text-sm md:text-base">
+                      {isYearly ? "/year" : "/month"}
+                    </span>
                   </div>
                   <ul className="mb-6 flex-grow">
                     {plan.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-center mb-2 text-sm md:text-base text-gray-700">
+                      <li
+                        key={idx}
+                        className="flex items-center mb-2 text-sm md:text-base text-gray-700"
+                      >
                         <Check className="mr-2 text-green-500" size={16} />
                         <span>{feature}</span>
                       </li>
@@ -230,8 +270,8 @@ export function Pricing() {
                     whileTap={{ scale: 0.95 }}
                     className={`py-2 px-4 rounded text-sm md:text-base ${
                       selectedPlan === plan.name
-                        ? 'bg-black text-white hover:bg-gray-700'
-                        : 'bg-gray-100 text-black hover:bg-gray-200'
+                        ? "bg-black text-white hover:bg-gray-700"
+                        : "bg-gray-100 text-black hover:bg-gray-200"
                     } transition-colors`}
                   >
                     {plan.cta}
@@ -259,7 +299,8 @@ export function Pricing() {
               className="mx-auto max-w-[700px] text-gray-600 text-sm md:text-base lg:text-xl mb-8"
               variants={fadeIn}
             >
-              Can't find the answer you're looking for? Reach out to our customer support team.
+              Can't find the answer you're looking for? Reach out to our
+              customer support team.
             </motion.p>
             <Link
               to="/contact"
@@ -297,5 +338,3 @@ export function Pricing() {
     </div>
   );
 }
-
-   

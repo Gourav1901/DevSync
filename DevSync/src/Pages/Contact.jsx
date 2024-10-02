@@ -1,11 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from 'lucide-react';
+import { Menu, X } from "lucide-react";
+import Navbar from "../Components/Navbar";
 
 export function Contact() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
 
+  // Check if tokens are present in local storage on mount
+  useEffect(() => {
+    const accessToken = localStorage.getItem("access_token");
+    const refreshToken = localStorage.getItem("refresh_token");
+    if (accessToken || refreshToken) {
+      setIsLoggedIn(true); // User is logged in
+    } else {
+      setIsLoggedIn(false); // User is not logged in
+    }
+  }, []);
+
+  // Logout function to clear tokens and redirect to login
+  const handleLogout = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    setIsLoggedIn(false); // Update login state
+    // Redirect to login page
+  };
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
@@ -21,11 +41,10 @@ export function Contact() {
   };
 
   const navItems = [
-    { name: "Login", path: "/login" },
     { name: "Pricing", path: "/pricing" },
     { name: "About", path: "/about" },
     { name: "Contact", path: "/contact" },
-    { name: "CodeEditor", path: "/codeEditor" },
+    ...(isLoggedIn ? [{ name: "CodeEditor", path: "/codeEditor" }] : []),
   ];
 
   const toggleMobileMenu = () => {
@@ -50,22 +69,7 @@ export function Contact() {
           </motion.div>
           <span className="text-xl font-bold text-black">DevSync</span>
         </Link>
-        <nav className="ml-auto hidden md:flex gap-4 sm:gap-6">
-          {navItems.map(({ name, path }) => (
-            <motion.div
-              key={name}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Link
-                to={path}
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                {name}
-              </Link>
-            </motion.div>
-          ))}
-        </nav>
+        <Navbar />
         <button className="ml-auto md:hidden" onClick={toggleMobileMenu}>
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -80,24 +84,44 @@ export function Contact() {
             transition={{ duration: 0.3 }}
             className="md:hidden bg-white shadow-md"
           >
-            <nav className="flex flex-col items-center py-4">
+           <nav className="flex flex-col gap-2 p-4">
               {navItems.map(({ name, path }) => (
                 <Link
                   key={name}
                   to={path}
-                  className="text-sm font-medium hover:text-primary transition-colors py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors py-2"
+                  onClick={() => setIsMenuOpen(false)}
                 >
                   {name}
                 </Link>
               ))}
+              {isLoggedIn ? (
+                <motion.button
+                  className="text-sm font-medium text-black hover:text-grey-800 transition-colors"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </motion.button>
+              ) : (
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Link
+                    to="/register"
+                    className="text-sm font-medium text-black hover:text-grey-800 transition-colors"
+                  >
+                    Sign Up
+                  </Link>
+                </motion.div>
+              )}
             </nav>
           </motion.div>
         )}
       </AnimatePresence>
 
       <main className="flex-1">
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100">
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100">
           <motion.div
             className="container max-w-6xl px-4 md:px-6 mx-auto"
             initial="initial"

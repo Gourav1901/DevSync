@@ -2,10 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { FileCode } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
 import { toast, Toaster } from "react-hot-toast";
 
-const LoginPage = () => {
+const RegisterPage = () => {
   const canvasRef = useRef(null);
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -62,19 +64,20 @@ const LoginPage = () => {
     };
   }, []);
 
-  // Function to handle login form submission
-  const handleLogin = async (e) => {
+  // Function to handle the form submission
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     try {
       const response = await fetch(
-        "https://devsync-backend.onrender.com/user/login",
+        "https://devsync-backend.onrender.com/user/register",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            username,
             email,
             password,
           }),
@@ -83,18 +86,19 @@ const LoginPage = () => {
       );
 
       const result = await response.json();
-      console.log(result, "result after login");
+      console.log(result, "result after the register");
 
-      if (response.ok && result.msg === "User login successfully") {
+      if (response.ok && result.msg === "User has been created successfully") {
         toast.success(result.msg); // Success toast
-        localStorage.setItem("access_token", result.access_token);
-        localStorage.setItem("refresh_token", result.refresh_token);
-        // Navigate to the dashboard or another page on successful login
+        // Navigate to the desired page on successful registration
         setTimeout(() => {
-          navigate("/codeEditor"); // Example route after login
-        }, 2000);
-      } else if (result.msg === "Password is incorrect") {
-        toast.error(result.msg); // Error toast for incorrect password
+          navigate("/login"); // Navigate to login page after showing toast
+        }, 2000); // Example route after registration
+      } else if (
+        result.msg ===
+        "Password must have at least one uppercase character, one number, one special character, and be at least 8 characters long."
+      ) {
+        toast.error(result.msg); // Error toast for password validation
       } else {
         toast.error(result.msg); // Generic error toast for other issues
       }
@@ -144,8 +148,15 @@ const LoginPage = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
-          onSubmit={handleLogin} // Submit form handler for login
+          onSubmit={handleRegister} // Submit form handler
         >
+          <input
+            type="text"
+            placeholder="Username"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)} // Update state
+          />
           <input
             type="email"
             placeholder="Email"
@@ -164,7 +175,7 @@ const LoginPage = () => {
             type="submit"
             className="w-full bg-primary text-black px-4 py-2 rounded border border-slate-950 text-base sm:text-xl transition-all duration-300 hover:bg-black hover:text-white"
           >
-            Sign In
+            Sign Up
           </button>
         </motion.form>
         <motion.div
@@ -190,4 +201,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
