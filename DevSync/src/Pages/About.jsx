@@ -5,26 +5,6 @@ import Navbar from "../Components/Navbar";
 
 export default function About() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
-
-  // Check if tokens are present in local storage on mount
-  useEffect(() => {
-    const accessToken = localStorage.getItem("access_token");
-    const refreshToken = localStorage.getItem("refresh_token");
-    if (accessToken || refreshToken) {
-      setIsLoggedIn(true); // User is logged in
-    } else {
-      setIsLoggedIn(false); // User is not logged in
-    }
-  }, []);
-
-  // Logout function to clear tokens and redirect to login
-  const handleLogout = () => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    setIsLoggedIn(false); // Update login state
-    // Redirect to login page
-  };
 
   // Animation variants for transitions
   const fadeIn = {
@@ -41,12 +21,37 @@ export default function About() {
     },
   };
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
+
+  // Check if tokens are present in local storage on mount
+  useEffect(() => {
+    const accessToken = localStorage.getItem("access_token");
+    const refreshToken = localStorage.getItem("refresh_token");
+    if (accessToken || refreshToken) {
+      setIsLoggedIn(true); // User is logged in
+    } else {
+      setIsLoggedIn(false); // User is not logged in
+    }
+  }, []);
+
+  // Logout function to clear tokens and update login state
+  const handleLogout = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    setIsLoggedIn(false); // Update login state
+    // Redirect to login page if needed (e.g., using useNavigate)
+  };
+
   const navItems = [
     { name: "Pricing", path: "/pricing" },
     { name: "About", path: "/about" },
     { name: "Contact", path: "/contact" },
+    // Only add CodeEditor link if logged in
     ...(isLoggedIn ? [{ name: "CodeEditor", path: "/codeEditor" }] : []),
   ];
+  const toggleMobileMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
   console.log(isLoggedIn, "login state");
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
@@ -68,7 +73,39 @@ export default function About() {
             DevSync
           </span>
         </Link>
-        <Navbar />
+        <nav className="ml-auto hidden md:flex gap-6">
+          {navItems.map(({ name, path }) => (
+            <motion.div
+              key={name}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link
+                to={path}
+                className="text-sm font-medium text-black hover:text-grey-800 transition-colors"
+              >
+                {name}
+              </Link>
+            </motion.div>
+          ))}
+          {isLoggedIn ? (
+            <motion.button
+              className="text-sm font-medium text-black hover:text-grey-800 transition-colors"
+              onClick={handleLogout}
+            >
+              Logout
+            </motion.button>
+          ) : (
+            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                to="/register"
+                className="text-sm font-medium text-black hover:text-grey-800 transition-colors"
+              >
+                Sign Up
+              </Link>
+            </motion.div>
+          )}
+        </nav>
 
         <motion.button
           className="ml-auto md:hidden p-2 rounded-md hover:bg-gray-100"
@@ -103,20 +140,25 @@ export default function About() {
             transition={{ duration: 0.3 }}
             className="md:hidden bg-white shadow-lg rounded-b-lg overflow-hidden"
           >
-            <nav className="flex flex-col gap-2 p-4">
+            <nav className="flex flex-col items-center py-4">
               {navItems.map(({ name, path }) => (
-                <Link
+                <motion.div
                   key={name}
-                  to={path}
-                  className="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors py-2"
-                  onClick={() => setIsMenuOpen(false)}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  {name}
-                </Link>
+                  <Link
+                    to={path}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="text-sm font-medium  hover:text-primary transition-colors py-2"
+                  >
+                    {name}
+                  </Link>
+                </motion.div>
               ))}
               {isLoggedIn ? (
                 <motion.button
-                  className="text-sm font-medium text-black hover:text-grey-800 transition-colors"
+                  className="text-sm font-medium  hover:text-primary transition-colors py-2"
                   onClick={handleLogout}
                 >
                   Logout
@@ -128,7 +170,7 @@ export default function About() {
                 >
                   <Link
                     to="/register"
-                    className="text-sm font-medium text-black hover:text-grey-800 transition-colors"
+                    className="text-sm font-medium  hover:text-primary transition-colors py-2"
                   >
                     Sign Up
                   </Link>

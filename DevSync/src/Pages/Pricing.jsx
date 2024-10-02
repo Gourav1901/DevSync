@@ -37,13 +37,21 @@ export function Pricing() {
     }
   }, []);
 
-  // Logout function to clear tokens and redirect to login
+  // Logout function to clear tokens and update login state
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     setIsLoggedIn(false); // Update login state
-    // Redirect to login page
+    // Redirect to login page if needed (e.g., using useNavigate)
   };
+
+  const navItems = [
+    { name: "Pricing", path: "/pricing" },
+    { name: "About", path: "/about" },
+    { name: "Contact", path: "/contact" },
+    // Only add CodeEditor link if logged in
+    ...(isLoggedIn ? [{ name: "CodeEditor", path: "/codeEditor" }] : []),
+  ];
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
@@ -58,12 +66,6 @@ export function Pricing() {
     },
   };
 
-  const navItems = [
-    { name: "Pricing", path: "/pricing" },
-    { name: "About", path: "/about" },
-    { name: "Contact", path: "/contact" },
-    ...(isLoggedIn ? [{ name: "CodeEditor", path: "/codeEditor" }] : []),
-  ];
   const pricingPlans = [
     {
       name: "Basic",
@@ -127,7 +129,39 @@ export function Pricing() {
           </motion.div>
           <span className="text-xl font-bold text-black">DevSync</span>
         </Link>
-        <Navbar />
+        <nav className="ml-auto hidden md:flex gap-6">
+          {navItems.map(({ name, path }) => (
+            <motion.div
+              key={name}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link
+                to={path}
+                className="text-sm font-medium text-black hover:text-grey-800 transition-colors"
+              >
+                {name}
+              </Link>
+            </motion.div>
+          ))}
+          {isLoggedIn ? (
+            <motion.button
+              className="text-sm font-medium text-black hover:text-grey-800 transition-colors"
+              onClick={handleLogout}
+            >
+              Logout
+            </motion.button>
+          ) : (
+            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                to="/register"
+                className="text-sm font-medium text-black hover:text-grey-800 transition-colors"
+              >
+                Sign Up
+              </Link>
+            </motion.div>
+          )}
+        </nav>
         <button className="ml-auto md:hidden" onClick={toggleMobileMenu}>
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -142,12 +176,12 @@ export function Pricing() {
             transition={{ duration: 0.3 }}
             className="md:hidden bg-white shadow-md"
           >
-            <nav className="flex flex-col gap-2 p-4">
+            <nav className="flex flex-col items-center py-4">
               {navItems.map(({ name, path }) => (
                 <Link
                   key={name}
                   to={path}
-                  className="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors py-2"
+                  className="text-sm font-medium  hover:text-primary transition-colors py-2"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {name}
@@ -155,7 +189,7 @@ export function Pricing() {
               ))}
               {isLoggedIn ? (
                 <motion.button
-                  className="text-sm font-medium text-black hover:text-grey-800 transition-colors"
+                  className="text-sm font-medium  hover:text-primary transition-colors py-2"
                   onClick={handleLogout}
                 >
                   Logout
@@ -167,7 +201,7 @@ export function Pricing() {
                 >
                   <Link
                     to="/register"
-                    className="text-sm font-medium text-black hover:text-grey-800 transition-colors"
+                    className="text-sm font-medium  hover:text-primary transition-colors py-2"
                   >
                     Sign Up
                   </Link>
