@@ -152,12 +152,14 @@ export function HomePage() {
                     </button>
                   </Link>
                 )}
-                <button
-                  className="bg-white text-black py-2 px-6 rounded border border-black hover:bg-black hover:text-white transition-colors"
-                  variant="outline"
-                >
-                  Learn More
-                </button>
+                <Link to="/docs">
+                  <button
+                    className="bg-white text-black py-2 px-6 rounded border border-black hover:bg-black hover:text-white transition-colors"
+                    variant="outline"
+                  >
+                    Learn More
+                  </button>
+                </Link>
               </motion.div>
             </div>
           </motion.div>
