@@ -182,7 +182,7 @@ export function Pricing() {
                   key={name}
                   to={path}
                   className="text-sm font-medium  hover:text-primary transition-colors py-2"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {name}
                 </Link>
@@ -202,6 +202,7 @@ export function Pricing() {
                   <Link
                     to="/register"
                     className="text-sm font-medium  hover:text-primary transition-colors py-2"
+                    onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Sign Up
                   </Link>
