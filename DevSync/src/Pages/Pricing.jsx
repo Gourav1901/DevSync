@@ -357,17 +357,7 @@ export function Pricing() {
           <div className="text-gray-500 text-sm md:text-base">
             &copy; {new Date().getFullYear()} DevSync. All rights reserved.
           </div>
-          <nav className="flex flex-wrap justify-center gap-4">
-            {navItems.map(({ name, path }) => (
-              <Link
-                key={name}
-                to={path}
-                className="text-xs md:text-sm font-medium text-gray-500 hover:text-black transition-colors"
-              >
-                {name}
-              </Link>
-            ))}
-          </nav>
+         
         </div>
       </motion.footer>
     </div>
