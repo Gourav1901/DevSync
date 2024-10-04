@@ -7,7 +7,7 @@ import { toast, Toaster } from "react-hot-toast";
 
 const RegisterPage = () => {
   const canvasRef = useRef(null);
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(""); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
