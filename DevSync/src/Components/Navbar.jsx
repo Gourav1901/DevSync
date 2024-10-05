@@ -32,6 +32,9 @@ function Navbar() {
     ...(isLoggedIn ? [{ name: "CodeEditor", path: "/codeEditor" }] : []),
   ];
 
+
+
+  
   return (
     <nav className="ml-auto hidden md:flex gap-6">
       {navItems.map(({ name, path }) => (
