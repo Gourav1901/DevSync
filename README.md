@@ -24,7 +24,7 @@ Clone the repository:
 
 bash
 Copy code
-git clone https://github.com/yourusername/devsync.git
+https://github.com/Gourav1901/DevSync.git
 Navigate to the project directory:
 
 bash
